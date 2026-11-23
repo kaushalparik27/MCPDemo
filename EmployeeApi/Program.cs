@@ -33,6 +33,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // When a class asks for IEmployee, give it EmployeeManager.
 builder.Services.AddScoped<IEmployee, EmployeeManager>();
 
+// CORS: lets a web app on another address (the Angular app) call this API from the browser.
+// The allowed addresses are in appsettings.json (Cors:AllowedOrigins).
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("WebApp", policy =>
+        policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod());
+});
+
 // Swagger: creates the API description and the Swagger UI page.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -75,6 +84,7 @@ if (app.Environment.IsDevelopment())
 
 // 3. Basic web middleware.
 app.UseHttpsRedirection();
+app.UseCors("WebApp");
 app.UseAuthorization();
 
 // 4. Endpoints.

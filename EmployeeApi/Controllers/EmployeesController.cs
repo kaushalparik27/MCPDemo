@@ -65,4 +65,54 @@ public class EmployeesController : ControllerBase
 
         return Ok(employee);
     }
+
+    /// <summary>
+    /// Create a new employee. Returns 201 with the saved employee.
+    /// Returns 400 if a value is not valid (for example the email is used already).
+    /// </summary>
+    [HttpPost]
+    public async Task<ActionResult<EmployeeDto>> Create(EmployeeSaveRequest request)
+    {
+        var employee = await _employees.CreateAsync(request);
+
+        // 201 Created. The Location header points to GET /api/employees/{id}.
+        return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
+    }
+
+    /// <summary>
+    /// Change an employee. Send all fields. Returns 404 if the id does not exist.
+    /// </summary>
+    /// <param name="id">The employee id.</param>
+    /// <param name="request">The new values.</param>
+    [HttpPut("{id}")]
+    public async Task<ActionResult<EmployeeDto>> Update(int id, EmployeeSaveRequest request)
+    {
+        var employee = await _employees.UpdateAsync(id, request);
+
+        if (employee == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(employee);
+    }
+
+    /// <summary>
+    /// Delete an employee (soft delete: the row stays, but the employee is hidden).
+    /// Returns 204 when done, 404 if the id does not exist,
+    /// 400 if the employee is the manager of other active employees.
+    /// </summary>
+    /// <param name="id">The employee id.</param>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _employees.DeleteAsync(id);
+
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

@@ -24,9 +24,11 @@ bld/
 [Ll]ogs/
 
 # .NET Core
+.vs
 project.lock.json
 project.fragment.lock.json
 artifacts/
+EmployeeMcpServer/EmployeeMcpServer.csproj.user
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
@@ -55,3 +57,7 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+
+CLAUDE.md
+

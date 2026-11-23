@@ -12,4 +12,10 @@ public class EmployeeDto
     public string City { get; set; } = "";
     public string State { get; set; } = "";
     public string? ManagerName { get; set; }
+
+    // Extra fields for the web form (edit page). The form needs the separate parts and the ids.
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public int LocationDepartmentId { get; set; }
+    public int? ManagerId { get; set; }
 }
